@@ -1,52 +1,82 @@
 package com.stud.awra.openweatherapp;
 
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.stud.awra.openweatherapp.response5day.Result5day;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+
+  private MyAdapter adapter;
+  private FloatingActionButton fab;
+  private Toolbar toolbar;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    Toolbar toolbar = findViewById(R.id.toolbar);
+    toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
+    final RecyclerView recyclerView = findViewById(R.id.recycler_view);
+    recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+    adapter = new MyAdapter();
+    recyclerView.setAdapter(adapter);
 
-    FloatingActionButton fab = findViewById(R.id.fab);
+    fab = findViewById(R.id.fab);
     fab.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
+        getWeather();
         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
             .setAction("Action", null).show();
       }
     });
+    getWeather();
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.menu_main, menu);
-    return true;
+  private void getWeather() {
+    App.getApiOpenWeather()
+        .getWeatherForDay5("kiev", ApiOpenWeather.UNITS, ApiOpenWeather.LANG,
+            ApiOpenWeather.API_KEY, 40).enqueue(new Callback<Result5day>() {
+      @Override public void onResponse(Call<Result5day> call, Response<Result5day> response) {
+        if (response.isSuccessful() && response.errorBody() == null) {
+          if (response.body() != null) {
+            adapter.setData(response.body().getListWeather());
+            toolbar.setTitle(response.body().getCity().getName());
+          }
+        } else {
+          Snackbar.make(fab, response.errorBody().toString(), Snackbar.LENGTH_INDEFINITE).show();
+        }
+      }
+
+      @Override public void onFailure(Call<Result5day> call, Throwable t) {
+        Snackbar.make(fab, t.getMessage(), Snackbar.LENGTH_INDEFINITE).show();
+      }
+    });
   }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    int id = item.getItemId();
-
-    //noinspection SimplifiableIfStatement
-    if (id == R.id.action_settings) {
-      return true;
-    }
-
-    return super.onOptionsItemSelected(item);
-  }
+  //@Override
+  //public boolean onCreateOptionsMenu(Menu menu) {
+  //  getMenuInflater().inflate(R.menu.menu_main, menu);
+  //  return true;
+  //}
+  //
+  //@Override
+  //public boolean onOptionsItemSelected(MenuItem item) {
+  //  int id = item.getItemId();
+  //
+  //  if (id == R.id.action_settings) {
+  //    return true;
+  //  }
+  //
+  //  return super.onOptionsItemSelected(item);
+  //}
 }

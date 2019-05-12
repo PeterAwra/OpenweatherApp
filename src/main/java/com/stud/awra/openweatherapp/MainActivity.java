@@ -1,5 +1,6 @@
 package com.stud.awra.openweatherapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
       @Override
       public void onClick(View view) {
         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-            .setAction("Action", null).show();
+            .setAction("Action", v -> startActivity(new Intent(getApplicationContext(),MapsActivity.class))).show();
       }
     });
   }

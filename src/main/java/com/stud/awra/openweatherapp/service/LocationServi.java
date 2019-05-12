@@ -1,4 +1,4 @@
-package com.stud.awra.openweatherapp;
+package com.stud.awra.openweatherapp.service;
 
 import android.Manifest;
 import android.app.Activity;
@@ -19,13 +19,12 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class LocationServi {
-  public static final int REQUEST_CODE_PERMISSION = 555;
-  MyLocationInt myLocationInt;
+  private static final int REQUEST_CODE_PERMISSION = 555;
+  private MyLocationInt myLocationInt;
   private LatLng deflatLng = new LatLng(47.5414, 31.34);
-  private LatLng resultLatLng;
   private Context context;
 
-  public void attach(Context context) {
+  public LocationServi attach(Context context) {
     this.context = context;
     if (context instanceof MyLocationInt) {
       myLocationInt = (MyLocationInt) context;
@@ -33,6 +32,7 @@ public class LocationServi {
       throw new UnsupportedOperationException(
           context.getClass().getSimpleName() + "must implement MyLocationInt");
     }
+    return this;
   }
 
   private LatLng getLocation() {
@@ -98,7 +98,7 @@ public class LocationServi {
       Toast.makeText(context, "Try again)", Toast.LENGTH_SHORT).show();
     }
     if (address != null) {
-      resultLatLng = new LatLng(address.getLatitude(), address.getLongitude());
+      LatLng resultLatLng = new LatLng(address.getLatitude(), address.getLongitude());
       myLocationInt.setLocation(resultLatLng,
           String.format("%s, %s", address.getLocality(), address.getCountryName()));
     } else {

@@ -11,10 +11,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.stud.awra.openweatherapp.service.LocationServi;
+import com.stud.awra.openweatherapp.service.MyLocationInt;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, MyLocationInt {
 
-  public static final int REQUEST_CODE_PERMISSION = 555;
   private GoogleMap mMap;
   private MarkerOptions position;
   private TextView textViewLocation;

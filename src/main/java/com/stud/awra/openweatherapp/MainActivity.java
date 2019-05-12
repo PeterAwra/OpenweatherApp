@@ -2,18 +2,20 @@ package com.stud.awra.openweatherapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.format.DateUtils;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.stud.awra.openweatherapp.model.RepositoryImpl;
+import com.stud.awra.openweatherapp.service.LocationServi;
+import com.stud.awra.openweatherapp.service.MyLocationInt;
 import io.reactivex.disposables.Disposable;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MyLocationInt {
 
   public static final int REQUEST_CODE = 556;
   public static final String LANTITUDE = "com.stud.awra.openweatherapp.lantitude";
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
     adapter = new MyAdapter();
     recyclerView.setAdapter(adapter);
-    getWeather("kiev");
+    new LocationServi().attach(this).moveToLocation();
   }
 
   @Override
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void dispose() {
-    if (!subscribe.isDisposed()) {
+    if (subscribe != null && !subscribe.isDisposed()) {
       subscribe.dispose();
     }
   }
@@ -77,5 +79,10 @@ public class MainActivity extends AppCompatActivity {
             },
             throwable -> Snackbar.make(fab, throwable.toString(), Snackbar.LENGTH_INDEFINITE)
                 .show());
+  }
+
+  @Override public void setLocation(LatLng latLng, String name) {
+    toolbar.setTitle(name);
+    getWeather(latLng.latitude, latLng.longitude);
   }
 }

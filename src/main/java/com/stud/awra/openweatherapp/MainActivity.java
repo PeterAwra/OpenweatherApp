@@ -2,6 +2,7 @@ package com.stud.awra.openweatherapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;

@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.stud.awra.openweatherapp.model.ListWeather;
-import java.util.Date;
 
 class MyHolder extends RecyclerView.ViewHolder {
   private final Context context;
@@ -30,8 +29,8 @@ class MyHolder extends RecyclerView.ViewHolder {
     Glide.with(context)
         .load("http://openweathermap.org/img/w/" + weather.getWeather().get(0).getIcon() + ".png")
         .into(iV);
-    t1.setText(new Date( (long) (weather.getDt() * 1000)).toString());
-    t2.setText(weather.getWeather().get(0).getDescription());
-    t3.setText(weather.getMain().getTempMax() + "\u00b0  "+weather.getMain().getTempMin()+"\u00b0");
+    t1.setText(weather.getDayName());
+    t2.setText(weather.getDescription());
+    t3.setText(weather.getMinMaxTemp());
   }
 }

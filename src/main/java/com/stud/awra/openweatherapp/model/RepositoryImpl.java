@@ -30,8 +30,12 @@ public class RepositoryImpl implements Repository {
                 ApiOpenWeather.UNITS,
                 ApiOpenWeather.LANG,
                 ApiOpenWeather.API_KEY,
-                40).observeOn(Schedulers.io())
-            .map(Result5::getListWeather)
+                40)
+            .observeOn(Schedulers.io())
+            .map(result5 -> {
+              result5.getListWeather().get(0).setNameCity(result5.getCity().getName());
+              return result5.getListWeather();
+            })
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io());
   }
@@ -43,8 +47,10 @@ public class RepositoryImpl implements Repository {
             ApiOpenWeather.LANG,
             ApiOpenWeather.API_KEY,
             40)
-        .observeOn(Schedulers.io())
-        .map(Result5::getListWeather)
+        .map(result5 -> {
+          result5.getListWeather().get(0).setNameCity(result5.getCity().getName());
+          return result5.getListWeather();
+        })
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeOn(Schedulers.io());
   }
@@ -56,7 +62,10 @@ public class RepositoryImpl implements Repository {
             ApiOpenWeather.LANG,
             ApiOpenWeather.API_KEY)
         .observeOn(Schedulers.io())
-        .map(result -> result.getWeather().get(0))
+        .map(result -> {
+          result.getWeather().get(0).setCity(result.getName());
+          return result.getWeather().get(0);
+        })
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeOn(Schedulers.io());
   }
@@ -68,7 +77,10 @@ public class RepositoryImpl implements Repository {
             ApiOpenWeather.LANG,
             ApiOpenWeather.API_KEY).
             observeOn(Schedulers.io())
-        .map(result -> result.getWeather().get(0))
+        .map(result -> {
+          result.getWeather().get(0).setCity(result.getName());
+          return result.getWeather().get(0);
+        })
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeOn(Schedulers.io());
   }

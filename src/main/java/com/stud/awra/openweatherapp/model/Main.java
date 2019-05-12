@@ -31,24 +31,24 @@ public class Main {
     @Expose
     private Double tempKf;
 
-    public Double getTemp() {
-        return temp;
+    public int getTemp() {
+        return temp.intValue();
     }
 
     public void setTemp(Double temp) {
         this.temp = temp;
     }
 
-    public Double getTempMin() {
-        return tempMin;
+    public int getTempMin() {
+        return tempMin.intValue();
     }
 
     public void setTempMin(Double tempMin) {
         this.tempMin = tempMin;
     }
 
-    public Double getTempMax() {
-        return tempMax;
+    public int getTempMax() {
+        return tempMax.intValue();
     }
 
     public void setTempMax(Double tempMax) {

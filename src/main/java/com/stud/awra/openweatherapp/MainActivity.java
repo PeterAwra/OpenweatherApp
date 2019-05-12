@@ -54,7 +54,10 @@ public class MainActivity extends AppCompatActivity {
   private void getWeather(double lan, double lon) {
     dispose();
     subscribe = App.getRepository().getWeather5Days(lan, lon)
-        .subscribe(listWeathers -> adapter.setData(listWeathers),
+        .subscribe(listWeathers -> {
+              toolbar.setTitle(listWeathers.get(0).getCity());
+              adapter.setData(listWeathers);
+            },
             throwable -> Snackbar.make(fab, throwable.toString(), Snackbar.LENGTH_INDEFINITE)
                 .show());
   }
@@ -67,7 +70,10 @@ public class MainActivity extends AppCompatActivity {
 
   private void getWeather(String name) {
     subscribe = new RepositoryImpl().getWeather5Days(name)
-        .subscribe(listWeathers -> adapter.setData(listWeathers),
+        .subscribe(listWeathers -> {
+              toolbar.setTitle(listWeathers.get(0).getCity());
+              adapter.setData(listWeathers);
+            },
             throwable -> Snackbar.make(fab, throwable.toString(), Snackbar.LENGTH_INDEFINITE)
                 .show());
   }
